@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.admin.app')
 
-@section('title', 'Connexion')
+@section('title', 'Inscription')
 
 @section('content')
 <div class="row justify-content-center">
@@ -10,8 +10,8 @@
                 <div class="row">
                     <div class="col-7">
                         <div class="text-primary p-4">
-                            <h5 class="text-primary">Bienvenue !</h5>
-                            <p>Connectez-vous à votre compte administrateur</p>
+                            <h5 class="text-primary">Créer un compte</h5>
+                            <p>Inscrivez-vous pour accéder au système</p>
                         </div>
                     </div>
                     <div class="col-5 align-self-end">
@@ -38,8 +38,16 @@
                     </a>
                 </div>
                 <div class="p-2">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('register') }}">
                         @csrf
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom complet</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Adresse email</label>
@@ -57,21 +65,20 @@
                             @enderror
                         </div>
 
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                            <label class="form-check-label" for="remember">
-                                Se souvenir de moi
-                            </label>
+                        <div class="mb-3">
+                            <label for="password_confirmation" class="form-label">Confirmer le mot de passe</label>
+                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                         </div>
 
                         <div class="mt-3 d-grid">
-                            <button class="btn btn-primary waves-effect waves-light" type="submit">Se connecter</button>
+                            <button class="btn btn-primary waves-effect waves-light" type="submit">S'inscrire</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
         <div class="mt-5 text-center">
+            <p>Déjà un compte ? <a href="{{ route('login') }}" class="fw-medium text-primary">Se connecter</a></p>
             <p>© <script>document.write(new Date().getFullYear())</script> Fondation GITHA LIDJA. Développé avec <i class="mdi mdi-heart text-danger"></i></p>
         </div>
     </div>

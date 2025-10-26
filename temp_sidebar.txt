@@ -1,0 +1,4 @@
+<li><a href="{{ route('admin.mission.edit') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Mission</a></li> 
+<li><a href="{{ route('admin.vision.edit') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Vision</a></li> 
+<li><a href="{{ route('admin.equipe.edit') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>êquipe</a></li> 
+<li><a href="{{ route('admin.histoire.edit') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Histoire</a></li>

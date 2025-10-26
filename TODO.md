@@ -1,56 +1,25 @@
-# TODO - Fondation GITHA LIDJA Development
+# Reorganize Views into Admin and Public Folders - COMPLETED
 
-## Phase 1: Public Layout & Pages ✅
-- [x] Create public layout (layouts/public.blade.php)
-- [x] Create home page (home.blade.php)
-- [x] Create about page (about.blade.php)
-- [x] Create projects page (projects.blade.php)
-- [x] Create news page (news.blade.php)
-- [x] Create donate page (donate.blade.php)
-- [x] Create volunteer page (volunteer.blade.php)
-- [x] Create partners page (partners.blade.php)
-- [x] Create contact page (contact.blade.php)
+## Information Gathered
+- Current structure has mixed admin and public views in resources/views/
+- Admin views: dashboard.blade.php, auth/ folder
+- Public views: home.blade.php, about.blade.php, contact.blade.php, news.blade.php, projects.blade.php, partners.blade.php, volunteer.blade.php, donate.blade.php, welcome.blade.php
+- Layouts already separated: layouts/app.blade.php (admin), layouts/public.blade.php (public)
+- Partials already separated: layouts/partials/ (admin), layouts/public/partials/ (public)
 
-## Phase 4: Controllers & Routes ✅
-- [x] Create PublicController for public pages
-- [x] Update routes/web.php for public routes
-- [x] Add route model binding
-- [x] Test all public routes (HTTP 200 responses)
+## Plan
+1. ✅ Create admin/ and public/ directories under resources/views/
+2. ✅ Move admin views to resources/views/admin/
+3. ✅ Move public views to resources/views/public/
+4. ✅ Update layout extends in moved files
+5. ✅ Update any references in controllers or routes if needed
 
-## Bootstrap Template Integration ✅
-- [x] Update public layout to use Bootstrap template structure
-- [x] Update navbar to include sidebar toggle button and template features
-- [x] Update footer to match template design
-- [x] Create public sidebar with all routes (manual/auto menu control)
-- [x] Integrate sidebar into public layout
-- [x] Test layout functionality (HTTP 200 responses)
+## Dependent Files to Edit
+- ✅ All view files that extend layouts
+- ✅ Controllers that return views (PublicController, DashboardController)
+- ✅ Routes that reference views
 
-## Phase 2: Multilingual Support ✅
-- [x] Set up Laravel localization (FR/EN)
-- [x] Create language files
-- [x] Add language switcher to public layout
-
-## Phase 3: Data Models & Migrations
-- [ ] Create News model & migration
-- [ ] Create Project model & migration
-- [ ] Create Donation model & migration
-- [ ] Create Volunteer model & migration
-- [ ] Create Partner model & migration
-- [ ] Create Contact model & migration
-
-## Phase 5: Admin Content Management
-- [ ] Create admin controllers for CRUD operations
-- [ ] Create admin views for managing content
-- [ ] Add admin routes with middleware
-
-## Phase 6: Stripe Payment Integration
-- [ ] Install Stripe PHP SDK
-- [ ] Create payment controller
-- [ ] Implement donation payment flow
-- [ ] Add payment success/error pages
-
-## Phase 7: Testing & Optimization
-- [ ] Test all public pages
-- [ ] Test admin functionality
-- [ ] Test payment integration
-- [ ] Optimize performance and security
+## Followup Steps
+- ✅ Test that all views load correctly after reorganization
+- ✅ Update any hardcoded view paths in controllers
+- ✅ Verify routes still work

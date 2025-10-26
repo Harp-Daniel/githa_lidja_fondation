@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use App\Models\MissionVision;
 
 class PublicController extends Controller
 {
@@ -26,41 +27,42 @@ class PublicController extends Controller
 
     public function home()
     {
-        return view('home');
+        return view('public.home');
     }
 
     public function about()
     {
-        return view('about');
+        $missionVision = MissionVision::first();
+        return view('public.about', compact('missionVision'));
     }
 
     public function projects()
     {
-        return view('projects');
+        return view('public.projects');
     }
 
     public function news()
     {
-        return view('news');
+        return view('public.news');
     }
 
     public function donate()
     {
-        return view('donate');
+        return view('public.donate');
     }
 
     public function volunteer()
     {
-        return view('volunteer');
+        return view('public.volunteer');
     }
 
     public function partners()
     {
-        return view('partners');
+        return view('public.partners');
     }
 
     public function contact()
     {
-        return view('contact');
+        return view('public.contact');
     }
 }

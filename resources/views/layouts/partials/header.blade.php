@@ -172,7 +172,7 @@
                             <div class="card-body p-0">
                                 <div class="grid-nav grid-nav-flush grid-nav-action grid-nav-no-rounded">
                                     <div class="grid-nav-row">
-                                        <a href="#" class="grid-nav-item">
+                                        <a href="{{ route('profile.edit') }}" class="grid-nav-item">
                                             <div class="grid-nav-icon"><i class="far fa-address-card"></i></div>
                                             <span class="grid-nav-content">Profil</span>
                                         </a>

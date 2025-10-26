@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('admin.auth.login');
     }
 
     public function login(Request $request)
@@ -39,9 +39,35 @@ class AuthController extends Controller
         return redirect('/');
     }
 
+    public function showProfileForm()
+    {
+        return view('admin.auth.profile');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'social_links' => 'nullable|json',
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'social_links' => $request->social_links,
+        ]);
+
+        return back()->with('success', 'Profil mis à jour avec succès.');
+    }
+
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        return view('admin.auth.register');
     }
 
     public function register(Request $request)

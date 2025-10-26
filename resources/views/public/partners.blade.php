@@ -502,4 +502,3 @@ document.getElementById('partnershipForm').addEventListener('submit', function(e
 });
 </script>
 @endsection
-@endsection

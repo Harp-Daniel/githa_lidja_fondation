@@ -1,4 +1,4 @@
-@extends('layouts.public')
+ @extends('layouts.public')
 
 @section('title', 'Devenir bénévole - Fondation GITHA LIDJA')
 
@@ -451,5 +451,4 @@ document.getElementById('volunteerForm').addEventListener('submit', function(e) 
     this.reset();
 });
 </script>
-@endsection
 @endsection
