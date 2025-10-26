@@ -1,4 +1,4 @@
-<?php
+ll;<?php
 
 namespace App\Http\Controllers;
 
@@ -9,9 +9,126 @@ use App\Models\Project;
 use App\Models\Event;
 use App\Models\Media;
 use App\Models\MissionVision;
+use App\Services\VideoProcessingService;
 
 class ContentController extends Controller
 {
+    protected $videoService;
+
+    public function __construct(VideoProcessingService $videoService)
+    {
+        $this->videoService = $videoService;
+    }
+
+    // Generic index method for resource routes
+    public function index()
+    {
+        $routeName = request()->route()->getName();
+        if (str_contains($routeName, 'projects')) {
+            return $this->indexProjects();
+        } elseif (str_contains($routeName, 'news')) {
+            return $this->indexNews();
+        } elseif (str_contains($routeName, 'events')) {
+            return $this->indexEvents();
+        } elseif (str_contains($routeName, 'media')) {
+            return $this->indexMedia();
+        }
+    }
+
+    // Generic create method
+    public function create()
+    {
+        $routeName = request()->route()->getName();
+        if (str_contains($routeName, 'projects')) {
+            return $this->createProject();
+        } elseif (str_contains($routeName, 'news')) {
+            return $this->createNews();
+        } elseif (str_contains($routeName, 'events')) {
+            return $this->createEvent();
+        } elseif (str_contains($routeName, 'media')) {
+            return $this->createMedia();
+        }
+    }
+
+    // Generic store method
+    public function store(Request $request)
+    {
+        $routeName = request()->route()->getName();
+        if (str_contains($routeName, 'projects')) {
+            return $this->storeProject($request);
+        } elseif (str_contains($routeName, 'news')) {
+            return $this->storeNews($request);
+        } elseif (str_contains($routeName, 'events')) {
+            return $this->storeEvent($request);
+        } elseif (str_contains($routeName, 'media')) {
+            return $this->storeMedia($request);
+        }
+    }
+
+    // Generic show method
+    public function show($id)
+    {
+        $routeName = request()->route()->getName();
+        if (str_contains($routeName, 'projects')) {
+            $project = Project::findOrFail($id);
+            return view('admin.content.projects.show', compact('project'));
+        } elseif (str_contains($routeName, 'news')) {
+            $news = News::findOrFail($id);
+            return view('admin.content.news.show', compact('news'));
+        } elseif (str_contains($routeName, 'events')) {
+            $event = Event::findOrFail($id);
+            return view('admin.content.events.show', compact('event'));
+        } elseif (str_contains($routeName, 'media')) {
+            $media = Media::findOrFail($id);
+            return view('admin.content.media.show', compact('media'));
+        }
+    }
+
+    // Generic edit method
+    public function edit($id)
+    {
+        $routeName = request()->route()->getName();
+        if (str_contains($routeName, 'projects')) {
+            return $this->editProject(Project::findOrFail($id));
+        } elseif (str_contains($routeName, 'news')) {
+            return $this->editNews(News::findOrFail($id));
+        } elseif (str_contains($routeName, 'events')) {
+            return $this->editEvent(Event::findOrFail($id));
+        } elseif (str_contains($routeName, 'media')) {
+            return $this->editMedia(Media::findOrFail($id));
+        }
+    }
+
+    // Generic update method
+    public function update(Request $request, $id)
+    {
+        $routeName = request()->route()->getName();
+        if (str_contains($routeName, 'projects')) {
+            return $this->updateProject($request, Project::findOrFail($id));
+        } elseif (str_contains($routeName, 'news')) {
+            return $this->updateNews($request, News::findOrFail($id));
+        } elseif (str_contains($routeName, 'events')) {
+            return $this->updateEvent($request, Event::findOrFail($id));
+        } elseif (str_contains($routeName, 'media')) {
+            return $this->updateMedia($request, Media::findOrFail($id));
+        }
+    }
+
+    // Generic destroy method
+    public function destroy($id)
+    {
+        $routeName = request()->route()->getName();
+        if (str_contains($routeName, 'projects')) {
+            return $this->destroyProject(Project::findOrFail($id));
+        } elseif (str_contains($routeName, 'news')) {
+            return $this->destroyNews(News::findOrFail($id));
+        } elseif (str_contains($routeName, 'events')) {
+            return $this->destroyEvent(Event::findOrFail($id));
+        } elseif (str_contains($routeName, 'media')) {
+            return $this->destroyMedia(Media::findOrFail($id));
+        }
+    }
+
     // News CRUD
     public function indexNews()
     {
@@ -83,7 +200,7 @@ class ContentController extends Controller
     public function indexProjects()
     {
         $projects = Project::all();
-        return view('admin.content.projects.index', compact('projects'));
+        return view('admin.content.projects.content', compact('projects'));
     }
 
     public function createProject()
@@ -95,10 +212,11 @@ class ContentController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
+            'results' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'video' => 'nullable|url',
-            'status' => 'required|string',
+            'video' => 'nullable|file|mimes:mp4,avi,mov,wmv,flv,mkv|max:51200',
+            'status' => 'required|string|in:planned,in_progress,completed,paused',
             'location' => 'nullable|string',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
@@ -107,8 +225,21 @@ class ContentController extends Controller
 
         $data = $request->all();
 
+        // Ensure status has a default value if not provided
+        if (!isset($data['status']) || empty($data['status'])) {
+            $data['status'] = 'planned';
+        }
+
+        // Set project as active by default for real-time publishing
+        $data['is_active'] = $data['is_active'] ?? true;
+
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('projects', 'public');
+        }
+
+        if ($request->hasFile('video')) {
+            // Traiter la vidéo avec compression et découpage automatique
+            $data['video'] = $this->videoService->processVideo($request->file('video'));
         }
 
         Project::create($data);
@@ -125,10 +256,11 @@ class ContentController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
+            'results' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'video' => 'nullable|url',
-            'status' => 'required|string',
+            'video' => 'nullable|file|mimes:mp4,avi,mov,wmv,flv,mkv|max:51200',
+            'status' => 'required|string|in:planned,in_progress,completed,paused',
             'location' => 'nullable|string',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date',
@@ -139,6 +271,11 @@ class ContentController extends Controller
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('projects', 'public');
+        }
+
+        if ($request->hasFile('video')) {
+            // Traiter la vidéo avec compression et découpage automatique
+            $data['video'] = $this->videoService->processVideo($request->file('video'));
         }
 
         $project->update($data);

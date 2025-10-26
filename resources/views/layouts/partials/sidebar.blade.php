@@ -28,7 +28,7 @@
                         <li><a href="{{ route('admin.histoire.edit') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Histoire</a></li>
                     </ul>
                 </li>
-               
+
 
                 <li class="menu-title">Administration</li>
 
@@ -38,11 +38,11 @@
                         <span>Gestion du contenu</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="#"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Actualités</a></li>
-                        <li><a href="#"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Projets</a></li>
-                        <li><a href="#"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Événements</a></li>
-                        <li><a href="#"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Médias</a></li>
-                        <li><a href="#"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Mission</a></li>
+                        <li><a href="{{ route('admin.news.index') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Actualités</a></li>
+                        <li><a href="{{ route('admin.projects.index') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Projets</a></li>
+                        <li><a href="{{ route('admin.events.index') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Événements</a></li>
+                        <li><a href="{{ route('admin.media.index') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Médias</a></li>
+                        <li><a href="{{ route('admin.mission-vision.edit') }}"><i class="mdi mdi-checkbox-blank-circle align-middle"></i>Mission</a></li>
                     </ul>
                 </li>
 

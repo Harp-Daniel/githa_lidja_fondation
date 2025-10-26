@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use App\Models\MissionVision;
+use App\Models\Project;
 
 class PublicController extends Controller
 {
@@ -38,7 +39,8 @@ class PublicController extends Controller
 
     public function projects()
     {
-        return view('public.projects');
+        $projects = Project::where('is_active', true)->get();
+        return view('public.projects', compact('projects'));
     }
 
     public function news()
